@@ -14,18 +14,28 @@ jobs:
         with:
           node-version: 18
 
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Install Project Dependencies
         run: npm install
-
-      - name: Setup EAS CLI
-        run: npm install -g eas-cli
 
       - name: Expo Prebuild
         run: npx expo prebuild --platform android
 
       - name: Build Android App (Local APK)
+        env:
+          _JAVA_OPTIONS: "-Xmx4g"
         run: |
-          cd android && ./gradlew assembleRelease
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
         continue-on-error: true
 
       - name: Upload APK (Mobile-e test korar jonno)
