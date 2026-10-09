@@ -27,3 +27,20 @@
     }
   }
 }
+
+{
+  "expo": {
+    "name": "aryan-ai",
+    "slug": "aryan-ai",
+    "version": "1.0.0",
+    "owner": "আপনার_expo_username",
+    "extra": {
+      "eas": {
+        "projectId": "আপনার_expo_project_id"
+      }
+    },
+    "android": {
+      "package": "com.skhameer.aryanai"
+    }
+  }
+}
