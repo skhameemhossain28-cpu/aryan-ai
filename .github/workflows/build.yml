@@ -14,42 +14,23 @@ jobs:
         with:
           node-version: 18
 
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Project Dependencies
         run: npm install
 
       - name: Setup EAS CLI
         run: npm install -g eas-cli
 
+      - name: Expo Prebuild
+        run: npx expo prebuild --platform android
 
-      - name: Build Android App (Local AAB for Play Store)
-        run: |
-          npx expo export
-          cd android && ./gradlew bundleRelease
-        continue-on-error: true
-
-      - name: Build Android App (Local APK for Testing)
+      - name: Build Android App (Local APK)
         run: |
           cd android && ./gradlew assembleRelease
         continue-on-error: true
 
-      - name: Upload AAB (Play Store-er jonno)
-        uses: actions/upload-artifact@v4
-        with:
-          name: play-store-bundle-aab
-          path: android/app/build/outputs/bundle/release/app-release.aab
-
       - name: Upload APK (Mobile-e test korar jonno)
         uses: actions/upload-artifact@v4
         with:
-          name: testing-app-apk
+          name: my-testing-apk
           path: android/app/build/outputs/apk/release/app-release.apk
           
