@@ -11,6 +11,8 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+
+         
     "android": {
       "package": "com.yourname.aryanai",
       "permissions": [
