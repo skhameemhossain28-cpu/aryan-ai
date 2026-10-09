@@ -1,46 +1,54 @@
-name: Android APK Build
+name: EAS Android Dual Build
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 jobs:
-  build:
+  build_apk:
+    name: Build Android APK (Testing-er jonno)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js Environment
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Install Project Dependencies
-        run: npm install
+      - name: Trigger EAS APK Build
+        run: eas build --platform android --profile preview --non-interactive
 
-      - name: Expo Prebuild
-        run: npx expo prebuild --platform android
+  build_aab:
+    name: Build Android AAB (Play Store-er jonno)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
 
-      - name: Build Android App (Local APK)
-        env:
-          _JAVA_OPTIONS: "-Xmx4g"
-        run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon
-        continue-on-error: true
-
-      - name: Upload APK (Mobile-e test korar jonno)
-        uses: actions/upload-artifact@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          name: my-testing-apk
-          path: android/app/build/outputs/apk/release/app-release.apk
-          
+          node-version: 18
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Trigger EAS AAB Build
+        run: eas build --platform android --profile production --non-interactive
+        
