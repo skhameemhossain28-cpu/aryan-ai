@@ -212,3 +212,5 @@ const styles = StyleSheet.create({
   btnActive: { backgroundColor: 'red' },
   btnText: { fontSize: 18, color: 'white' }
 });
+
+
